@@ -1,4 +1,4 @@
-# dlh_utils-documentation
+# dlh_utils_documentation
 
 sphinx documentation to accompany the dlh_utils functions
 
