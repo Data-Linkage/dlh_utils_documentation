@@ -1,0 +1,30 @@
+Welcome to DLH_utils's documentation!
+=====================================
+
+A Python package produced by the Linkage Development team from the Data Linkage Hub at Office for National Statistics (ONS) containing a set of functions used to expedite and streamline the data linkage process.
+
+It's key features include:
+
+- it's scalability to large datasets, using spark as a big-data backend
+- profiling and flagging functions used to describe and highlight issues in data
+- standardisation and cleaning functions to make data comparable ahead of linkage
+- linkage functions to derive linkage variables and join data together efficiently
+
+Please log an issue on the issue board or contact any of the active contributors with any issues or suggestions for improvements you have.
+
+
+.. toctree::
+   :maxdepth: 20
+   
+   dataframes
+   
+.. toctree::
+   :maxdepth: 20
+   
+   flags
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

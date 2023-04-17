@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dataframes &mdash; dlh_utils documentation 1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="flags.html" />
+    <link rel="prev" title="Welcome to DLH_utils’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            dlh_utils documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Dataframes</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dropcolumns"><strong>dropColumns()</strong></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dlh_utils documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><strong>Dataframes</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dataframes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="dataframes">
+<h1><strong>Dataframes</strong><a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h1>
+<p>import re
+import pyspark.sql.functions as F
+from pyspark.sql import Window
+from dlh_utils import standardisation as st</p>
+<hr class="docutils" />
+<div class="section" id="dropcolumns">
+<h2><strong>dropColumns()</strong><a class="headerlink" href="#dropcolumns" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>def select(df, columns=None, startswith=None, endswith=None, contains=None,</dt>
+<dd><blockquote class="first">
+<div>regex=None, drop_duplicates=True):</div></blockquote>
+<p>“””
+Retains only specified list of columns or columns meeting startswith,
+endswith, contains or regex arguments.</p>
+<dl class="docutils">
+<dt>df <span class="classifier-delimiter">:</span> <span class="classifier">dataframe</span></dt>
+<dd>Dataframe to which the function is applied.</dd>
+<dt>columns <span class="classifier-delimiter">:</span> <span class="classifier">string or list of strings, default = None</span></dt>
+<dd>This argument can be entered as a list of column headers
+that are the columns to be selected. If a single string
+that is a name of a column is entered, it will select
+only that column.</dd>
+<dt>startswith <span class="classifier-delimiter">:</span> <span class="classifier">string, default = None</span></dt>
+<dd>This parameter takes a string value and selects
+columns from the dataframe if the column
+title starts with the string value.</dd>
+<dt>endswith <span class="classifier-delimiter">:</span> <span class="classifier">string, default = None</span></dt>
+<dd>This parameter takes a string value and selects
+columns from the dataframe if the column
+title ends with the string value.</dd>
+<dt>contains <span class="classifier-delimiter">:</span> <span class="classifier">string, default = None</span></dt>
+<dd>This parameter takes a string value and selects
+columns from the dataframe if the column
+title contains the string value.</dd>
+<dt>regex <span class="classifier-delimiter">:</span> <span class="classifier">string, default = None</span></dt>
+<dd>This parameter takes a string value in
+regex format and selects columns from the
+dataframe if the column title matches
+the conditions of the regex string.</dd>
+<dt>drop_duplicates <span class="classifier-delimiter">:</span> <span class="classifier">bool, default = True</span></dt>
+<dd>This parameter drops duplicated columns.</dd>
+</dl>
+<dl class="docutils">
+<dt>dataframe</dt>
+<dd>Dataframe with columns limited to those
+specified by the parameters.</dd>
+</dl>
+<p>None at present.</p>
+<dl class="docutils">
+<dt>data = [(“1”,”6”,”1”,”Simpson”,”1983-05-12”,”M”,”ET74 2SP”),</dt>
+<dd>(“2”,”8”,”2”,”Simpson”,”1983-03-19”,”F”,”ET74 2SP”),
+(“3”,”7”,”3”,”Simpson”,”2012-04-01”,”M”,”ET74 2SP”),
+(“3”,”9”,”3”,”Simpson”,”2012-04-01”,”M”,”ET74 2SP”),
+(“4”,”9”,”4”,”Simpson”,”2014-05-09”,”F”,”ET74 2SP”),
+(“5”,”6”,”4”,”Simpson”,”2021-01-12”,”F”,”ET74 2SP”)]</dd>
+</dl>
+<p>df=spark.createDataFrame(data=data,schema=[“ID”,”ID2”,”clust”,”ROWNUM”,”DoB”,”Sex”,”Postcode”])</p>
+<p>&gt; df.show()
++—+——–+———-+——-+———-+—+——–+
+| ID|Forename|Middlename|Surname|       DoB|Sex|Postcode|
++—+——–+———-+——-+———-+—+——–+
+|  1|   Homer|       Jay|Simpson|1983-05-12|  M|ET74 2SP|
+|  2|   Marge|    Juliet|Simpson|1983-03-19|  F|ET74 2SP|
+|  3|    Bart|     Jo-Jo|Simpson|2012-04-01|  M|ET74 2SP|
+|  3|    Bart|     Jo-Jo|Simpson|2012-04-01|  M|ET74 2SP|
+|  4|    Lisa|     Marie|Simpson|2014-05-09|  F|ET74 2SP|
+|  5|  Maggie|      null|Simpson|2021-01-12|  F|ET74 2SP|
++—+——–+———-+——-+———-+—+——–+</p>
+<dl class="docutils">
+<dt>&gt; select(df,columns = None, startswith = ‘F’).show()</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Forename</td>
+</tr>
+<tr class="row-even"><td><blockquote class="first">
+<div>Homer
+Marge</div></blockquote>
+<dl class="last docutils">
+<dt>Maggie</dt>
+<dd>Bart
+Lisa</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>&gt; select(df,columns = None, endswith = ‘e’,drop_duplicates = False).show()</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="24%" />
+<col width="30%" />
+<col width="21%" />
+<col width="24%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Forename</td>
+<td>Middlename</td>
+<td>Surname</td>
+<td>Postcode</td>
+</tr>
+<tr class="row-even"><td><blockquote class="first">
+<div><p>Homer
+Marge</p>
+<blockquote>
+<div>Bart
+Bart
+Lisa</div></blockquote>
+</div></blockquote>
+<p class="last">Maggie</p>
+</td>
+<td><blockquote class="first">
+<div>Jay</div></blockquote>
+<dl class="last docutils">
+<dt>Juliet</dt>
+<dd><p class="first">Jo-Jo
+Jo-Jo
+Marie</p>
+<blockquote class="last">
+<div>null</div></blockquote>
+</dd>
+</dl>
+</td>
+<td>Simpson
+Simpson
+Simpson
+Simpson
+Simpson
+Simpson</td>
+<td>ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>&gt; select(df,columns = None, contains = ‘name’).show()</dt>
+<dd><table border="1" class="first docutils">
+<colgroup>
+<col width="32%" />
+<col width="40%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Forename</td>
+<td>Middlename</td>
+<td>Surname</td>
+</tr>
+<tr class="row-even"><td><blockquote class="first">
+<div><blockquote>
+<div>Bart</div></blockquote>
+<p>Marge
+Homer</p>
+<blockquote>
+<div>Lisa</div></blockquote>
+</div></blockquote>
+<p class="last">Maggie</p>
+</td>
+<td><blockquote class="first">
+<div>Jo-Jo</div></blockquote>
+<dl class="last docutils">
+<dt>Juliet</dt>
+<dd><blockquote class="first">
+<div>Jay</div></blockquote>
+<dl class="last docutils">
+<dt>Marie</dt>
+<dd>null</dd>
+</dl>
+</dd>
+</dl>
+</td>
+<td>Simpson
+Simpson
+Simpson
+Simpson
+Simpson</td>
+</tr>
+</tbody>
+</table>
+<p class="last">&gt; select(df,columns = None, regex = ‘^[A-Z]{2}$’).show()
++—+
+| ID|
++—+
+|  3|
+|  5|
+|  1|
+|  4|
+|  2|
++—+</p>
+</dd>
+</dl>
+<p>“””
+if columns is not None:</p>
+<blockquote>
+<div>df = df.select(columns)</div></blockquote>
+<dl class="docutils">
+<dt>if startswith is not None:</dt>
+<dd><dl class="first docutils">
+<dt>df = df.select(</dt>
+<dd>[x for x in df.columns if x.startswith(startswith)]</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+<dt>if endswith is not None:</dt>
+<dd><dl class="first docutils">
+<dt>df = df.select(</dt>
+<dd>[x for x in df.columns if x.endswith(endswith)]</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+<dt>if contains is not None:</dt>
+<dd><dl class="first docutils">
+<dt>df = df.select(</dt>
+<dd>[x for x in df.columns if contains in x]</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+<dt>if regex is not None:</dt>
+<dd><dl class="first docutils">
+<dt>df = df.select(</dt>
+<dd>[x for x in df.columns if re.search(regex, x)]</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+<dt>if drop_duplicates:</dt>
+<dd>df = df.dropDuplicates()</dd>
+</dl>
+<p class="last">return df</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to DLH_utils’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="flags.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Linkage Development Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flags &mdash; dlh_utils documentation 1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Dataframes" href="dataframes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            dlh_utils documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="dataframes.html"><strong>Dataframes</strong></a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Flags</strong></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dlh_utils documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><strong>Flags</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/flags.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="flags">
+<h1><strong>Flags</strong><a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h1>
+<p>‘’’
+Flag functions, used to quickly highlight anomalous values within data
+‘’’
+from operator import add
+from pyspark.sql import SparkSession
+from pyspark.sql.types import IntegerType
+import pyspark.sql.functions as F
+import pandas as pd
+from functools import reduce</p>
+<hr class="docutils" />
+<dl class="docutils">
+<dt>def flag(df, ref_col, condition, condition_value=None, condition_col=None,</dt>
+<dd><blockquote class="first">
+<div>alias=None, prefix=’FLAG’, fill_null=None):</div></blockquote>
+<p>“””
+Adds True or False flags to supplied dataframe that can then be used for
+quality checks.</p>
+<p>Conditions can be set in comparison to columns or specific values
+(e.g. == column, ==1).  Conditions covered are equals, not equals,
+greater/less than, is/is not null. Optional TRUE/FALSE
+fill for null outputs of comparision. Designed for use in conjunction with
+flag_summary() and flag_check() functions.</p>
+<p>This function creates a column filled with TRUE or FALSE values
+based on whether a condition has been met.</p>
+<p>NOTE: If an alias is not specified, a Flag column name is automatically
+generated.</p>
+<dl class="docutils">
+<dt>df <span class="classifier-delimiter">:</span> <span class="classifier">dataframe</span></dt>
+<dd>The dataframe the function is applied to.</dd>
+<dt>ref_col <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>The column title that the conditions are
+performing checks upon.</dd>
+<dt>condition <span class="classifier-delimiter">:</span> <span class="classifier">{‘==’,’!=’,’&gt;’,’&gt;=’,&lt;=’,’&lt;’,’isNull’,’isNotNull’}</span></dt>
+<dd>Conditional statements used to compare values to the
+ref_col.</dd>
+<dt>condition_value <span class="classifier-delimiter">:</span> <span class="classifier">data-types, default = None</span></dt>
+<dd>The value the ref_col is being compared against.</dd>
+<dt>condition_col <span class="classifier-delimiter">:</span> <span class="classifier">data-types, default = None</span></dt>
+<dd>Comparison column for flag condition</dd>
+<dt>alias <span class="classifier-delimiter">:</span> <span class="classifier">string, default = None</span></dt>
+<dd>Alias for flag column.</dd>
+<dt>prefix <span class="classifier-delimiter">:</span> <span class="classifier">string, default = ‘FLAG’</span></dt>
+<dd>Default alias flag column prefix.</dd>
+<dt>fill_null <span class="classifier-delimiter">:</span> <span class="classifier">bool, default = False</span></dt>
+<dd>True or False fill where condition operations
+return null.</dd>
+</dl>
+<dl class="docutils">
+<dt>dataframe</dt>
+<dd>Dataframe with additional window column.</dd>
+</dl>
+<p>None at present.</p>
+<p>&gt; df.show()</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="16%" />
+<col width="20%" />
+<col width="14%" />
+<col width="20%" />
+<col width="6%" />
+<col width="16%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ID</td>
+<td>Forename</td>
+<td>Middlename</td>
+<td>Surname</td>
+<td>DoB</td>
+<td>Sex</td>
+<td>Postcode</td>
+</tr>
+<tr class="row-even"><td>1
+2
+3
+3
+4
+5</td>
+<td><blockquote class="first">
+<div><p>Homer
+Marge</p>
+<blockquote>
+<div>Bart
+Bart
+Lisa</div></blockquote>
+</div></blockquote>
+<p class="last">Maggie</p>
+</td>
+<td><blockquote class="first">
+<div>Jay</div></blockquote>
+<dl class="last docutils">
+<dt>Juliet</dt>
+<dd><p class="first">Jo-Jo
+Jo-Jo
+Marie</p>
+<blockquote class="last">
+<div>null</div></blockquote>
+</dd>
+</dl>
+</td>
+<td>Simpson
+Simpson
+Simpson
+Simpson
+Simpson
+Simpson</td>
+<td>1983-05-12
+1983-03-19
+2012-04-01
+2012-04-01
+2014-05-09
+2021-01-12</td>
+<td>M
+F
+M
+M
+F
+F</td>
+<td>ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>&gt; flag(df,</dt>
+<dd>ref_col = ‘Middlename’,
+condition = ‘isNotNull’,
+condition_value=None,
+condition_col=None,
+alias = None,
+prefix=’FLAG’,
+fill_null = None).show()</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="11%" />
+<col width="14%" />
+<col width="10%" />
+<col width="14%" />
+<col width="4%" />
+<col width="11%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ID</td>
+<td>Forename</td>
+<td>Middlename</td>
+<td>Surname</td>
+<td>DoB</td>
+<td>Sex</td>
+<td>Postcode</td>
+<td>FLAG_MiddlenameisNotNull</td>
+</tr>
+<tr class="row-even"><td>1
+2
+3
+3
+4
+5</td>
+<td><blockquote class="first">
+<div><p>Homer
+Marge</p>
+<blockquote>
+<div>Bart
+Bart
+Lisa</div></blockquote>
+</div></blockquote>
+<p class="last">Maggie</p>
+</td>
+<td><blockquote class="first">
+<div>Jay</div></blockquote>
+<dl class="last docutils">
+<dt>Juliet</dt>
+<dd><p class="first">Jo-Jo
+Jo-Jo
+Marie</p>
+<blockquote class="last">
+<div>null</div></blockquote>
+</dd>
+</dl>
+</td>
+<td>Simpson
+Simpson
+Simpson
+Simpson
+Simpson
+Simpson</td>
+<td>1983-05-12
+1983-03-19
+2012-04-01
+2012-04-01
+2014-05-09
+2021-01-12</td>
+<td>M
+F
+M
+M
+F
+F</td>
+<td>ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP
+ET74 2SP</td>
+<td><blockquote class="first">
+<div>true
+true
+true
+true
+true</div></blockquote>
+<p class="last">false</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>“””</p>
+<dl class="docutils">
+<dt>if (alias is None</dt>
+<dd><blockquote class="first">
+<div>and condition_value is not None):</div></blockquote>
+<p class="last">alias_value = str(condition_value)
+alias = f”{prefix}_{ref_col}{condition}{alias_value}”</p>
+</dd>
+<dt>if (alias is None</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<p class="last">alias = f”{prefix}_{ref_col}{condition}_{condition_col}”</p>
+</dd>
+<dt>if (alias is None</dt>
+<dd><dl class="first docutils">
+<dt>and condition_col is None</dt>
+<dd>and condition_value is None):</dd>
+</dl>
+<p class="last">alias = f”{prefix}_{ref_col}{condition}”</p>
+</dd>
+<dt>if (condition == ‘==’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) == F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘==’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) == condition_value)</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&gt;’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &gt; F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&gt;’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &gt; condition_value)</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&gt;=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &gt;= F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&gt;=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &gt;= condition_value)</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&lt;’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &lt; F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&lt;’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &lt; condition_value)</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&lt;=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &lt;= F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘&lt;=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) &lt;= condition_value)</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘!=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is not None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) != F.col(condition_col))</dd>
+</dl>
+</dd>
+<dt>if (condition == ‘!=’</dt>
+<dd><blockquote class="first">
+<div>and condition_col is None):</div></blockquote>
+<dl class="last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd>F.col(ref_col) != condition_value)</dd>
+</dl>
+</dd>
+<dt>if condition == ‘isNull’:</dt>
+<dd><dl class="first last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd><dl class="first docutils">
+<dt>(F.col(ref_col).isNull()) | (</dt>
+<dd>F.isnan(F.col(ref_col)))</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+</dl>
+</dd>
+<dt>if condition == ‘isNotNull’:</dt>
+<dd><dl class="first last docutils">
+<dt>df = df.withColumn(alias,</dt>
+<dd><dl class="first docutils">
+<dt>(F.col(ref_col).isNotNull()) &amp; (</dt>
+<dd>F.isnan(F.col(ref_col)) == False)</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+</dl>
+</dd>
+<dt>if fill_null is not None:</dt>
+<dd><dl class="first last docutils">
+<dt>df = (df</dt>
+<dd><dl class="first docutils">
+<dt>.withColumn(alias,</dt>
+<dd><dl class="first docutils">
+<dt>F.when(F.col(alias).isNull(),</dt>
+<dd>fill_null)</dd>
+</dl>
+<p class="last">.otherwise(F.col(alias)))</p>
+</dd>
+</dl>
+<p class="last">)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="last">return df</p>
+</dd>
+</dl>
+<hr class="docutils" />
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dataframes.html" class="btn btn-neutral float-left" title="Dataframes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Linkage Development Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
