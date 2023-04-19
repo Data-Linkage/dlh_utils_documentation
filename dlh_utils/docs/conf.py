@@ -15,14 +15,14 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('..')) #parent directory, . = docs .. = dlh_utils folder where the functions sit
 
 
 # -- Project information -----------------------------------------------------
 
-project = u'dlh_utils documentation'
-copyright = u'2023, Linkage Development Team'
-author = u'Linkage Development Team'
+project = u'dlh_utils'
+copyright = u'2023, Linkage Development Team, Data Linkage Hub'
+author = u'Linkage Development Team, Data Linkage Hub'
 
 # The short X.Y version
 version = u''
@@ -40,8 +40,7 @@ release = u'1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.viewcode'
-]
+    'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

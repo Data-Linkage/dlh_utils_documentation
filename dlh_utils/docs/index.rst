@@ -1,7 +1,9 @@
-Welcome to DLH_utils's documentation!
+Welcome to DLH_utils' documentation!
 =====================================
 
-A Python package produced by the Linkage Development team from the Data Linkage Hub at Office for National Statistics (ONS) containing a set of functions used to expedite and streamline the data linkage process.
+This documentation contains details of all of the available functions, including the name, arguments and a brief description of each one for DLH_utils.
+
+DLH_utils is a python package produced by the Linkage Development team from the Data Linkage Hub at Office for National Statistics (ONS) containing a set of functions used to expedite and streamline the data linkage process.
 
 It's key features include:
 
@@ -10,19 +12,15 @@ It's key features include:
 - standardisation and cleaning functions to make data comparable ahead of linkage
 - linkage functions to derive linkage variables and join data together efficiently
 
-Please log an issue on the issue board or contact any of the active contributors with any issues or suggestions for improvements you have.
+To begin, head to our seperate GitHub repository (dlh_utils) [ADD A LINK] where you’ll find a readme [ADD A LINK] document to show you how to get started.
 
 Functions
 
-.. toctree:: 
-   :maxdepth: 20
+.. toctree:: Contents
+   :maxdepth: 1
    
    dataframes
-   
-.. toctree::
-   :maxdepth: 20
-   
-   flags
+   api.rst
 
 ==================
 
